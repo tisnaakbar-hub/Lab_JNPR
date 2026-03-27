@@ -1,0 +1,29 @@
+nodes:
+  - name: R1
+    mgmt: 172.16.103.81
+    loopback: 10.255.255.1/32
+    interfaces:
+      - { name: ge-0/0/0, ip: 10.10.10.1/30 } # ke R2
+      - { name: ge-0/0/1, ip: 10.10.10.5/30 } # ke R3
+      - { name: ge-0/0/2, ip: 10.10.10.9/30 } # ke R4
+  - name: R2
+    mgmt: 172.16.103.82
+    loopback: 10.255.255.2/32
+    interfaces:
+      - { name: ge-0/0/0, ip: 10.10.10.2/30 }  # ke R1
+      - { name: ge-0/0/1, ip: 10.10.10.13/30 } # ke R3
+      - { name: ge-0/0/2, ip: 10.10.10.17/30 } # ke R4
+  - name: R3
+    mgmt: 172.16.103.83
+    loopback: 10.255.255.3/32
+    interfaces:
+      - { name: ge-0/0/0, ip: 10.10.10.6/30 }  # ke R1
+      - { name: ge-0/0/1, ip: 10.10.10.14/30 } # ke R2
+      - { name: ge-0/0/2, ip: 10.10.10.21/30 } # ke R4
+  - name: R4
+    mgmt: 172.16.103.84
+    loopback: 10.255.255.4/32
+    interfaces:
+      - { name: ge-0/0/0, ip: 10.10.10.10/30 } # ke R1
+      - { name: ge-0/0/1, ip: 10.10.10.18/30 } # ke R2
+      - { name: ge-0/0/2, ip: 10.10.10.22/30 } # ke R3
