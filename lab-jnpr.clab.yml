@@ -1,0 +1,68 @@
+name: lab-jnpr
+mgmt:
+  bridge: br103
+  ipv4-subnet: 172.16.103.0/24
+topology:
+  nodes:
+    R1:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.2R1.7
+      mgmt-ipv4: 172.16.103.81
+
+    R2:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.2R1.7
+      mgmt-ipv4: 172.16.103.82
+
+    R3:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.2R1.7
+      mgmt-ipv4: 172.16.103.83
+
+    R4:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.2R1.7
+      mgmt-ipv4: 172.16.103.84
+
+    ME1:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.2R1.7
+      mgmt-ipv4: 172.16.103.85
+
+    ME2:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.2R1.7
+      mgmt-ipv4: 172.16.103.86
+
+    ME3:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.2R1.7
+      mgmt-ipv4: 172.16.103.87
+
+    ME4:
+      kind: juniper_vjunosrouter
+      image: vrnetlab/juniper_vjunos-router:25.2R1.7
+      mgmt-ipv4: 172.16.103.88
+
+  links:
+  # Interlink R to R #
+    - endpoints: [ "R1:eth1", "R2:eth1" ]
+    - endpoints: [ "R1:eth2", "R3:eth1" ]
+    - endpoints: [ "R1:eth3", "R4:eth1" ]
+    - endpoints: [ "R2:eth2", "R3:eth2" ]
+    - endpoints: [ "R2:eth3", "R4:eth2" ]
+    - endpoints: [ "R3:eth3", "R4:eth3" ]
+
+# Interlink R to ME
+    - endpoints: [ "R1:eth4", "ME1:eth1" ]
+    - endpoints: [ "R2:eth4", "ME2:eth1" ]
+    - endpoints: [ "R3:eth4", "ME3:eth1" ]
+    - endpoints: [ "R4:eth4", "ME4:eth1" ]
+
+# Interlink ME to ME
+    - endpoints: [ "ME1:eth2", "ME2:eth2" ]
+    - endpoints: [ "ME1:eth3", "ME1:eth4" ]
+    - endpoints: [ "ME2:eth3", "ME2:eth4" ]
+    - endpoints: [ "ME3:eth2", "ME4:eth2" ]
+    - endpoints: [ "ME3:eth3", "ME3:eth4" ]
+    - endpoints: [ "ME4:eth3", "ME4:eth4" ]
