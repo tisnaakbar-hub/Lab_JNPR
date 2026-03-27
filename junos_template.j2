@@ -1,0 +1,27 @@
+{%- set lb_raw = loopback.split('/')[0] -%}
+{%- set iso_id = "%03d%03d%03d%03d"|format(*lb_raw.split('.')|map('int')) -%}
+{%- set iso_addr = "49.0001." + iso_id[0:4] + "." + iso_id[4:8] + "." + iso_id[8:12] + ".00" -%}
+set system host-name {{ name }}
+set protocols lldp interface all
+set interfaces lo0 unit 0 family inet address {{ loopback }}
+set interfaces lo0 unit 0 family iso address {{ iso_addr }}
+{% for iface in interfaces -%}
+set interfaces {{ iface.name }} unit 0 family inet address {{ iface.ip }}
+set interfaces {{ iface.name }} unit 0 family iso
+set interfaces {{ iface.name }} unit 0 family mpls
+set protocols isis interface {{ iface.name }}.0 point-to-point
+set protocols mpls interface {{ iface.name }}.0
+set protocols ldp interface {{ iface.name }}.0
+{% endfor -%}
+set protocols isis level 2 wide-metrics-only
+set protocols isis interface lo0.0
+set protocols ldp interface lo0.0
+set routing-options autonomous-system 65000
+set protocols bgp group IBGP-INTERNAL type internal
+set protocols bgp group IBGP-INTERNAL local-address {{ lb_raw }}
+set protocols bgp group IBGP-INTERNAL family inet unicast
+{% for nb_lb in all_loopbacks -%}
+{% if nb_lb != lb_raw -%}
+set protocols bgp group IBGP-INTERNAL neighbor {{ nb_lb }}
+{% endif -%}
+{% endfor -%}
